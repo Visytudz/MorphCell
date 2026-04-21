@@ -1,0 +1,12 @@
+defaults:
+  - system: pretrain_redblood
+  - data: pretrain_redblood
+  - logger: [wandb]
+  - callback: pretrain
+  - trainer: default
+  - hydra: default
+  - _self_           
+
+# Global settings
+project_name: "3DMorphCell"
+seed: 42

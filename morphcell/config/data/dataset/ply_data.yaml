@@ -1,0 +1,8 @@
+redblood:
+  _target_: "morphcell.data.PLYDataset"
+  ply_dir: null
+  ply_list: ["/home/verve/Storage/Datasets/General/cell-3D/redblood/datasets/pcl1/SDE/echinocyte3/0450.ply"] # List of PLY filenames
+  num_points: null
+  normalize: true
+  load_to_ram: true
+  pca_align: true

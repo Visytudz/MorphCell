@@ -3,9 +3,9 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cellpoint"
+name = "morphcell"
 version = "0.1.0"
-description = "CellPoint: A Cell Point Cloud Learning Framework"
+description = "MorphCell: A Cell Point Cloud Learning Framework"
 requires-python = ">=3.8"
 
 dependencies = [
@@ -26,10 +26,10 @@ dependencies = [
 ]
 
 [project.scripts]
-cellpoint-run = "cellpoint.main:main"
+morphcell-run = "morphcell.main:main"
 
 [tool.setuptools.packages.find]
-include = ["cellpoint*"]
+include = ["morphcell*"]
 
 [tool.setuptools.package-data]
-cellpoint = ["configs/**/*.yaml"]
+morphcell = ["configs/**/*.yaml"]

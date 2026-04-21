@@ -1,0 +1,7 @@
+_target_: morphcell.utils.transform.Compose
+transforms:
+  - _target_: morphcell.utils.transform.PointcloudFarthestPointSampling
+    num_points: 2048
+    expand_ratio: 1.1
+
+  # - _target_: morphcell.utils.transform.PointcloudRotate
