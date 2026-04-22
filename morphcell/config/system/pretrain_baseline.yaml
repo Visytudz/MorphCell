@@ -1,0 +1,17 @@
+defaults:
+  - model/foldingnet_reconstructor@reconstructor
+  - transform/pretrain@transform
+  - _self_
+
+_target_: morphcell.model.BaselinePretrain
+
+optimizer_cfg:
+  lr: 5e-4
+  min_lr: 1e-6
+  epochs: 200
+  weight_decay: 0.05
+  warmup_epochs: 10
+  warmup_lr_init: 1e-6
+
+resume_ckpt_path: null
+pretrained_ckpt_path: null
