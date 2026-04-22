@@ -93,12 +93,6 @@ class InferenceModel:
         self.model = self.model.to(self.device)
         self.model.eval()
 
-        # Store model components for easy access
-        self.extractor = self.model.extractor
-        self.decoder = self.model.decoder
-        self.global_decoder = self.model.global_decoder
-        self.view_generator = self.model.view_generator
-
     def get_device(self) -> torch.device:
         """Get current device"""
         return self.device

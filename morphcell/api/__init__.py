@@ -2,12 +2,11 @@
 
 from .inference import MorphCellInference
 from .model import InferenceModel
-from .features import FeatureExtractor
-from .reconstruction import ReconstructionEngine
+from .types import FeatureBundle, ModelCapabilities
 
 __all__ = [
     "MorphCellInference",
     "InferenceModel",
-    "FeatureExtractor",
-    "ReconstructionEngine",
+    "FeatureBundle",
+    "ModelCapabilities",
 ]
