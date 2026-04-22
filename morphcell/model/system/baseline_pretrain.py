@@ -112,3 +112,14 @@ class BaselinePretrain(pl.LightningModule):
         )
 
         return loss_recon
+
+    def on_train_epoch_end(self):
+        metrics = self.trainer.callback_metrics
+        loss_epoch = metrics.get("train/loss_epoch", 0)
+        loss_recon = metrics.get("train/loss_recon_epoch", 0)
+
+        logger.info(
+            f"Epoch {self.current_epoch} finished | "
+            f"Loss: {loss_epoch:.4f} | "
+            f"Recon: {loss_recon:.4f}"
+        )
