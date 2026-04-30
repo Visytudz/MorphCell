@@ -68,6 +68,7 @@ class MorphCellInference:
         features: FeatureBundle,
         return_numpy: bool = True,
     ) -> np.ndarray | torch.Tensor:
+        features = self._prepare_features(features)
         reconstructed = self._backend.reconstruct_from_features(features)
         squeeze_if_single = features.global_features.ndim == 1
         return self._postprocess(
@@ -163,6 +164,25 @@ class MorphCellInference:
         if normalize_weights:
             weights = weights / weights.sum()
         return weights
+
+    def _prepare_features(self, features: FeatureBundle) -> FeatureBundle:
+        def move(value):
+            if isinstance(value, torch.Tensor):
+                return value.to(self.device)
+            if isinstance(value, dict):
+                return {key: move(item) for key, item in value.items()}
+            if isinstance(value, list):
+                return [move(item) for item in value]
+            if isinstance(value, tuple):
+                return tuple(move(item) for item in value)
+            return value
+
+        return FeatureBundle(
+            global_features=features.global_features.to(self.device),
+            local_features=move(features.local_features),
+            pooled_features=move(features.pooled_features),
+            aux=move(features.aux),
+        )
 
     def _postprocess(
         self,
