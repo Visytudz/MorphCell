@@ -5,6 +5,7 @@ __pycache__/
 .qoder/
 .claude
 CLAUDE.md
+AGENTS.md
 
 # Data folders
 /datasets
