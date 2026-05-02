@@ -10,7 +10,7 @@ from morphcell.loss import ChamferLoss
 logger = logging.getLogger(__name__)
 
 
-class BaselinePretrain(pl.LightningModule):
+class DFNPretrain(pl.LightningModule):
     def __init__(
         self,
         reconstructor,

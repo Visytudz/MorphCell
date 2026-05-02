@@ -1,4 +1,4 @@
-"""Baseline backend for encoder-decoder models like FoldingNet and DGCNN."""
+"""DFN backend for global-feature encoder-decoder inference."""
 
 import torch
 
@@ -6,8 +6,8 @@ from morphcell.api.backends.base import InferenceBackend
 from morphcell.api.types import FeatureBundle, ModelCapabilities
 
 
-class BaselineBackend(InferenceBackend):
-    """Inference backend for global-feature encoder-decoder baselines."""
+class DFNBackend(InferenceBackend):
+    """Inference backend for the DFN point-cloud autoencoder."""
 
     def __init__(self, model):
         self.model = model

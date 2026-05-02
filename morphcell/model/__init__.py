@@ -1,6 +1,7 @@
 from .system.pqae_pretrain import PQAEPretrain
 from .system.pqae_finetune import PQAEFinetune
-from .system.baseline_pretrain import BaselinePretrain
+from .system.dfn_pretrain import DFNPretrain
+from .component.dfn.model import DFNReconstructor
 from .component.pqae.view_generator import PointViewGenerator
 from .component.pqae.extractor import FeatureExtractor
 from .component.pqae.sqtd import SphericalQueryTransformerDecoder
@@ -10,7 +11,8 @@ from .component.pqae.classification_head import ClassificationHead
 __all__ = [
     "PQAEPretrain",
     "PQAEFinetune",
-    "BaselinePretrain",
+    "DFNPretrain",
+    "DFNReconstructor",
     "PointViewGenerator",
     "FeatureExtractor",
     "PointDecoder",

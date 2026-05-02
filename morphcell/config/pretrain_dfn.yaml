@@ -1,5 +1,5 @@
 defaults:
-  - system: pretrain_baseline
+  - system: pretrain_dfn
   - data: pretrain
   - logger: [wandb]
   - callback: pretrain

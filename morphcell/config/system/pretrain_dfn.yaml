@@ -1,9 +1,9 @@
 defaults:
-  - model/foldingnet_reconstructor@reconstructor
+  - model/dfn_reconstructor@reconstructor
   - transform/pretrain@transform
   - _self_
 
-_target_: morphcell.model.BaselinePretrain
+_target_: morphcell.model.DFNPretrain
 
 optimizer_cfg:
   lr: 5e-4

@@ -296,7 +296,7 @@ class FoldingNetDecoder(nn.Module):
         return reconstruction.transpose(2, 1)  # (B, M, 3)
 
 
-class FoldingNetReconstructor(nn.Module):
+class DFNReconstructor(nn.Module):
     def __init__(
         self,
         feat_dims: int = 512,
@@ -364,7 +364,7 @@ class FoldingNetReconstructor(nn.Module):
 
 
 if __name__ == "__main__":
-    model = FoldingNetReconstructor(encoder_type="foldingnet", grid_type="sphere")
+    model = DFNReconstructor(encoder_type="foldingnet", grid_type="sphere")
     point_cloud = torch.randn(1, 1024, 3)
     reconstruction = model(point_cloud)
     print(reconstruction.shape)

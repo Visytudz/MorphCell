@@ -1,4 +1,4 @@
-_target_: morphcell.model.component.foldingnet.model.FoldingNetReconstructor
+_target_: morphcell.model.DFNReconstructor
 feat_dims: 512
 k: 16
 grid_size: 45
