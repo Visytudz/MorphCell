@@ -4,6 +4,8 @@ __pycache__/
 .vscode/
 .qoder/
 .claude
+.codex
+.agents
 CLAUDE.md
 AGENTS.md
 
