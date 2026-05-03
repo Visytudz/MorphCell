@@ -1,0 +1,11 @@
+defaults:
+  - system: pretrain_cytodl_point
+  - data: pretrain
+  - logger: [wandb]
+  - callback: pretrain
+  - trainer: default
+  - hydra: default
+  - _self_
+
+project_name: "3DMorphCell"
+seed: 42

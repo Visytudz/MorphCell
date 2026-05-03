@@ -1,11 +1,13 @@
 """Backend registry for model-agnostic inference."""
 
 from morphcell.api.backends.base import InferenceBackend
+from morphcell.api.backends.cytodl_point import CytoDLPointBackend
 from morphcell.api.backends.dfn import DFNBackend
 from morphcell.api.backends.pqae import PQAEBackend
 
 __all__ = [
     "InferenceBackend",
+    "CytoDLPointBackend",
     "DFNBackend",
     "PQAEBackend",
     "create_backend",
@@ -13,13 +15,16 @@ __all__ = [
 
 
 def create_backend(model, device) -> InferenceBackend:
-    from morphcell.model import PQAEPretrain, DFNPretrain
+    from morphcell.model import PQAEPretrain, DFNPretrain, CytoDLPointPretrain
 
     if isinstance(model, PQAEPretrain):
         return PQAEBackend(model, device)
 
     if isinstance(model, DFNPretrain):
         return DFNBackend(model)
+
+    if isinstance(model, CytoDLPointPretrain):
+        return CytoDLPointBackend(model)
 
     raise ValueError(
         f"Unsupported model type: {type(model).__name__}. "

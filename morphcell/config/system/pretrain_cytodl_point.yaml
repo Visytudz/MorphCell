@@ -1,9 +1,9 @@
 defaults:
-  - model/dfn_reconstructor@reconstructor
+  - model/cytodl_point_reconstructor@reconstructor
   - transform/pretrain@transform
   - _self_
 
-_target_: morphcell.model.DFNPretrain
+_target_: morphcell.model.CytoDLPointPretrain
 
 optimizer_cfg:
   lr: 5e-4
