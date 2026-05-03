@@ -1,2 +1,5 @@
+accelerator: auto
+devices: auto
+strategy: auto
 accumulate_grad_batches: 1
 limit_train_batches: null

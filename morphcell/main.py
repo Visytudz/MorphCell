@@ -68,10 +68,6 @@ def main(cfg: DictConfig) -> None:
         max_epochs=max_epochs,
         logger=logger,
         callbacks=callbacks,
-        # hardware settings
-        accelerator="auto",
-        devices="auto",
-        strategy="auto",
         # logging settings
         log_every_n_steps=10,
         gradient_clip_val=1.0,

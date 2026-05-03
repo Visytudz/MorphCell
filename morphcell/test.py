@@ -32,8 +32,6 @@ def test(cfg: DictConfig) -> None:
     log.info("Initializing Trainer for testing")
     trainer = Trainer(
         default_root_dir=".",
-        accelerator="auto",
-        devices="auto",
         logger=False,  # No logging during test
         enable_checkpointing=False,  # Disable checkpointing during test
         **cfg.get("trainer", {}),
