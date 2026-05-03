@@ -6,23 +6,24 @@ build-backend = "setuptools.build_meta"
 name = "morphcell"
 version = "0.1.0"
 description = "MorphCell: A Cell Point Cloud Learning Framework"
-requires-python = ">=3.8"
+requires-python = ">=3.12,<3.13"
 
 dependencies = [
-    "torch>=1.10.0",
-    "numpy>=1.20.0",
-    "h5py>=3.0.0",
-    "pytorch-lightning>=1.5.0",
-    "hydra-core>=1.1.0",
-    "omegaconf>=2.1.0",
-    "wandb>=0.12.0",
-    "torchmetrics>=0.6.0",
-    "timm>=0.4.0",
-    "pointnet2-ops>=3.0.0",
-    "opencv-python>=4.5.0",
-    "open3d>=0.13.0",
-    "matplotlib>=3.3.0",
-    "seaborn>=0.11.0",
+    "torch==2.7.1+cu118",
+    "torchvision==0.22.1+cu118",
+    "pointnet2-ops==3.0.0",
+    "numpy==2.1.2",
+    "h5py==3.14.0",
+    "pytorch-lightning==2.5.6",
+    "hydra-core==1.3.2",
+    "omegaconf==2.3.0",
+    "wandb==0.21.1",
+    "torchmetrics==1.8.2",
+    "timm==1.0.20",
+    "opencv-python==4.12.0.88",
+    "open3d==0.19.0",
+    "matplotlib==3.10.6",
+    "seaborn==0.13.2",
 ]
 
 [project.scripts]
@@ -33,3 +34,17 @@ include = ["morphcell*"]
 
 [tool.setuptools.package-data]
 morphcell = ["configs/**/*.yaml"]
+
+[tool.uv]
+package = true
+no-build-isolation-package = ["pointnet2-ops"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu118" }
+torchvision = { index = "pytorch-cu118" }
+pointnet2-ops = { git = "https://github.com/erikwijmans/Pointnet2_PyTorch.git", rev = "b5ceb6d9ca0467ea34beb81023f96ee82228f626", subdirectory = "pointnet2_ops_lib" }
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true

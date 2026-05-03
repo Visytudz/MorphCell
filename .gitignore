@@ -1,27 +1,38 @@
-# Byte-compiled / optimized / DLL files
+# Python build artifacts
 __pycache__/
+*.py[cod]
+*$py.class
 *.egg-info/
+build/
+dist/
+
+# Virtual environments and package managers
+.venv/
+.python-version.local
+
+# IDE and editor state
 .vscode/
+.idea/
+
+# Agent/tool local state
+.agents/
+.claude/
+.codex/
 .qoder/
-.claude
-.codex
-.agents
-CLAUDE.md
+
+# Local contributor/agent notes
 AGENTS.md
+CLAUDE.md
 
-# Data folders
+# Data, runs, and generated artifacts
 /datasets
-outputs/
-scripts/
-notebooks/
-docs/
+/outputs/
 
-# typecheckers
+# Local analysis and utility workspaces
+/docs/
+/notebooks/
+/scripts/
+
+# Reports and exported diagnostics
 *.html
 
-# specific files
-cellpoint/config/data/dataset/ply_data.yaml
-cellpoint/config/data/pretrain_ply.yaml
-cellpoint/config/system/transform/pretrain_ply.yaml
-cellpoint/config/system/pretrain_ply.yaml
-cellpoint/config/pretrain_ply.yaml
