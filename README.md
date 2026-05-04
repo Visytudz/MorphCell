@@ -32,6 +32,13 @@ Activate the environment:
 source .venv/bin/activate
 ```
 
+Set the dataset root when data is not stored under the repository's
+`datasets/` directory:
+
+```bash
+export MORPHCELL_DATA_ROOT=/path/to/datasets
+```
+
 Verify the installation:
 
 ```bash

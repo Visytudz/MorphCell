@@ -1,6 +1,6 @@
 intestine:
   _target_: "morphcell.data.HDF5Dataset"
-  path: "/home/verve/Project/research/MorphCell/datasets/intestine/NUC"
+  path: "${paths.data_root}/intestine/NUC"
   splits: ["train"]
   num_points: null
   normalize: true

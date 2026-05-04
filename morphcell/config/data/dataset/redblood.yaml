@@ -1,6 +1,6 @@
 redblood:
   _target_: "morphcell.data.HDF5Dataset"
-  path: "/home/verve/Project/research/MorphCell/datasets/redblood"
+  path: "${paths.data_root}/redblood"
   splits: ["set2_4096"]
   num_points: null
   normalize: true

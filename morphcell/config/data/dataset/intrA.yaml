@@ -1,6 +1,6 @@
 intrA:
   _target_: "morphcell.data.HDF5Dataset"
-  path: "/home/verve/Project/research/MorphCell/datasets/intrA"
+  path: "${paths.data_root}/intrA"
   splits: ["all"]
   num_points: null
   normalize: true

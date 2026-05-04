@@ -1,6 +1,6 @@
 shapenet55_34:
   _target_: "morphcell.data.ShapeNetDataset"
-  pc_path: "/home/verve/Project/research/MorphCell/datasets/shapenet55-34/pcl"
-  split_path: "/home/verve/Project/research/MorphCell/datasets/shapenet55-34/splits"
+  pc_path: "${paths.data_root}/shapenet55-34/pcl"
+  split_path: "${paths.data_root}/shapenet55-34/splits"
   splits: ["train", "test"]
   num_points: null

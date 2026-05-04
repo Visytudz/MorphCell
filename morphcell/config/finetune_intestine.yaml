@@ -4,6 +4,7 @@ defaults:
   - logger: [wandb]
   - callback: finetune
   - trainer: default
+  - paths: default
   - hydra: default
   - _self_           
 
