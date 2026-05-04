@@ -1,6 +1,0 @@
-shapenet55_34:
-  _target_: "morphcell.data.ShapeNetDataset"
-  pc_path: "${paths.data_root}/shapenet55-34/pcl"
-  split_path: "${paths.data_root}/shapenet55-34/splits"
-  splits: ["test_parts"]
-  num_points: null
