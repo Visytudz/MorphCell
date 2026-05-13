@@ -33,7 +33,7 @@ class CytoDLPointBackend(InferenceBackend):
         return FeatureBundle(
             global_features=global_features,
             local_features=None,
-            pooled_features=global_features,
+            concated_features=global_features,
             aux={"rotation": encoded["rotation"]},
         )
 
@@ -61,5 +61,5 @@ class CytoDLPointBackend(InferenceBackend):
         return FeatureBundle(
             global_features=global_features,
             local_features=None,
-            pooled_features=global_features,
+            concated_features=global_features,
         )

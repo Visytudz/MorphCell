@@ -12,7 +12,7 @@ class FeatureBundle:
 
     global_features: torch.Tensor
     local_features: torch.Tensor | None = None
-    pooled_features: torch.Tensor | None = None
+    concated_features: torch.Tensor | None = None
     aux: dict[str, Any] = field(default_factory=dict)
 
 

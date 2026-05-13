@@ -180,7 +180,7 @@ class MorphCellInference:
         return FeatureBundle(
             global_features=features.global_features.to(self.device),
             local_features=move(features.local_features),
-            pooled_features=move(features.pooled_features),
+            concated_features=move(features.concated_features),
             aux=move(features.aux),
         )
 

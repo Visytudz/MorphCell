@@ -35,11 +35,11 @@ class PQAEBackend(InferenceBackend):
         cls_features, patch_features, centers, group = self.extractor(data)
         global_features = cls_features.squeeze(1)
         pooled_patch = patch_features.max(dim=1)[0]
-        pooled_features = torch.cat([global_features, pooled_patch], dim=-1)
+        concated_features = torch.cat([global_features, pooled_patch], dim=-1)
         return FeatureBundle(
             global_features=global_features,
             local_features=patch_features,
-            pooled_features=pooled_features,
+            concated_features=concated_features,
             aux={"centers": centers, "group": group},
         )
 
@@ -73,20 +73,20 @@ class PQAEBackend(InferenceBackend):
                 for weight, features in zip(weights, features_list)
             )
 
-        pooled_features = None
+        concated_features = None
         if local_features is not None:
             pooled_patch = local_features.max(dim=1)[0]
-            pooled_features = torch.cat([global_features, pooled_patch], dim=-1)
-        elif features_list and features_list[0].pooled_features is not None:
-            pooled_features = sum(
-                weight * features.pooled_features
+            concated_features = torch.cat([global_features, pooled_patch], dim=-1)
+        elif features_list and features_list[0].concated_features is not None:
+            concated_features = sum(
+                weight * features.concated_features
                 for weight, features in zip(weights, features_list)
             )
 
         return FeatureBundle(
             global_features=global_features,
             local_features=local_features,
-            pooled_features=pooled_features,
+            concated_features=concated_features,
         )
 
     def cross_reconstruct(self, data: torch.Tensor) -> dict[str, torch.Tensor]:

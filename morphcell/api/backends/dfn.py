@@ -32,7 +32,7 @@ class DFNBackend(InferenceBackend):
         return FeatureBundle(
             global_features=codeword,
             local_features=None,
-            pooled_features=codeword,
+            concated_features=codeword,
         )
 
     def reconstruct(self, data: torch.Tensor) -> torch.Tensor:
@@ -56,5 +56,5 @@ class DFNBackend(InferenceBackend):
         return FeatureBundle(
             global_features=global_features,
             local_features=None,
-            pooled_features=global_features,
+            concated_features=global_features,
         )
