@@ -25,6 +25,7 @@ class PQAEPretrain(pl.LightningModule):
         loss_weights=None,
         save_dir=None,
         enable_self_reconstruction: bool = False,
+        reconstruction_strategy: str = "cross",
         **kwargs,
     ):
         super().__init__()
@@ -55,6 +56,12 @@ class PQAEPretrain(pl.LightningModule):
         # other attributes
         self.save_dir = save_dir
         self.enable_self_reconstruction = enable_self_reconstruction
+        if reconstruction_strategy not in {"cross", "direct"}:
+            raise ValueError(
+                "reconstruction_strategy must be either 'cross' or 'direct', "
+                f"got {reconstruction_strategy!r}"
+            )
+        self.reconstruction_strategy = reconstruction_strategy
         self.test_step_outputs = []
 
         # Extractor Freeze Control
@@ -195,6 +202,48 @@ class PQAEPretrain(pl.LightningModule):
 
         return cross_recon1, cross_recon2
 
+    def direct_reconstruction(
+        self,
+        patch_features1: torch.Tensor,
+        patch_features2: torch.Tensor,
+        centers1: torch.Tensor,
+        centers2: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Reconstruct each view from its own patch tokens."""
+        zero_relative_center = torch.zeros_like(centers1[:, 0])
+        direct_recon1 = self.decoder(
+            source_tokens=patch_features1,
+            target_centers=centers1,
+            relative_center=zero_relative_center,
+        )
+        direct_recon2 = self.decoder(
+            source_tokens=patch_features2,
+            target_centers=centers2,
+            relative_center=zero_relative_center,
+        )
+        return direct_recon1, direct_recon2
+
+    def patch_reconstruction(
+        self,
+        patch_features1: torch.Tensor,
+        patch_features2: torch.Tensor,
+        centers1: torch.Tensor,
+        centers2: torch.Tensor,
+        relative_center_1_2: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Run the configured local-patch reconstruction pretext task."""
+        if self.reconstruction_strategy == "direct":
+            return self.direct_reconstruction(
+                patch_features1, patch_features2, centers1, centers2
+            )
+        return self.cross_reconstruction(
+            patch_features1,
+            patch_features2,
+            centers1,
+            centers2,
+            relative_center_1_2,
+        )
+
     def training_step(self, batch, batch_idx):
         # 1. get points and data agumentation
         pts = batch["points"]  # (B, N, 3)
@@ -210,8 +259,8 @@ class PQAEPretrain(pl.LightningModule):
         cls_features1, patch_features1, centers1, group1 = self.extractor(view1_rot)
         cls_features2, patch_features2, centers2, group2 = self.extractor(view2_rot)
 
-        # 4. cross reconstruction
-        cross_recon1, cross_recon2 = self.cross_reconstruction(
+        # 4. local patch reconstruction (cross-view or direct)
+        patch_recon1, patch_recon2 = self.patch_reconstruction(
             patch_features1, patch_features2, centers1, centers2, relative_center_1_2
         )  # (B, P, K, 3)
 
@@ -222,9 +271,9 @@ class PQAEPretrain(pl.LightningModule):
             self_recon2 = self.self_reconstruction(cls_features2, patch_features2)
 
         # 6. calculate loss
-        loss_cross = self.loss_fn(
-            group1.flatten(0, 1), cross_recon1.flatten(0, 1)
-        ) + self.loss_fn(group2.flatten(0, 1), cross_recon2.flatten(0, 1))
+        loss_patch = self.loss_fn(
+            group1.flatten(0, 1), patch_recon1.flatten(0, 1)
+        ) + self.loss_fn(group2.flatten(0, 1), patch_recon2.flatten(0, 1))
 
         if self.enable_self_reconstruction:
             target1 = (group1 + centers1.unsqueeze(2)).flatten(1, 2)
@@ -239,14 +288,16 @@ class PQAEPretrain(pl.LightningModule):
         # 7. combine losses with weights
         w_cross = self.loss_weights.cross
         w_self = self.loss_weights.self
-        total_loss = w_cross * loss_cross + w_self * loss_self
+        total_loss = w_cross * loss_patch + w_self * loss_self
 
         # Logging
         log_dict = {
             "train/loss": total_loss * 1000,
-            "train/loss_cross": loss_cross * 1000,
+            "train/loss_patch": loss_patch * 1000,
             "train/loss_self": loss_self * 1000,
         }
+        # Preserve the historical metric for existing cross-view runs.
+        log_dict[f"train/loss_{self.reconstruction_strategy}"] = loss_patch * 1000
         self.log_dict(
             log_dict,
             on_step=True,
@@ -284,13 +335,13 @@ class PQAEPretrain(pl.LightningModule):
         # Get epoch metrics from trainer's logged metrics
         metrics = self.trainer.callback_metrics
         loss_epoch = metrics.get("train/loss_epoch", 0)
-        loss_cross = metrics.get("train/loss_cross_epoch", 0)
+        loss_patch = metrics.get("train/loss_patch_epoch", 0)
         loss_self = metrics.get("train/loss_self_epoch", 0)
 
         logger.info(
             f"Epoch {epoch} finished | "
             f"Loss: {loss_epoch:.4f} | "
-            f"Cross: {loss_cross:.4f} | "
+            f"Patch ({self.reconstruction_strategy}): {loss_patch:.4f} | "
             f"Self: {loss_self:.4f} | "
         )
 
@@ -308,8 +359,8 @@ class PQAEPretrain(pl.LightningModule):
         - group2: Grouped patches from view2 (B, P, K, 3)
         - centers1: Centers of patches from view1 (B, P, 3)
         - centers2: Centers of patches from view2 (B, P, 3)
-        - cross_recon1: Cross reconstruction view1 (B, P, K, 3)
-        - cross_recon2: Cross reconstruction view2 (B, P, K, 3)
+        - patch_recon1: Local reconstruction of view1 (B, P, K, 3)
+        - patch_recon2: Local reconstruction of view2 (B, P, K, 3)
         - self_recon1: Self reconstruction view1 (B, P, K, 3)
         - self_recon2: Self reconstruction view2 (B, P, K, 3)
         - label: Label from batch if available
@@ -329,8 +380,8 @@ class PQAEPretrain(pl.LightningModule):
         cls_features1, patch_features1, centers1, group1 = self.extractor(view1_rot)
         cls_features2, patch_features2, centers2, group2 = self.extractor(view2_rot)
 
-        # 4. Cross reconstruction
-        cross_recon1, cross_recon2 = self.cross_reconstruction(
+        # 4. Local patch reconstruction
+        patch_recon1, patch_recon2 = self.patch_reconstruction(
             patch_features1, patch_features2, centers1, centers2, relative_center_1_2
         )
 
@@ -348,8 +399,8 @@ class PQAEPretrain(pl.LightningModule):
         # Add real centers: (B, P, K, 3) + (B, P, 1, 3) -> (B, P, K, 3)
         group1_with_centers = group1 + centers1.unsqueeze(2)
         group2_with_centers = group2 + centers2.unsqueeze(2)
-        cross_recon1_with_centers = cross_recon1 + centers1.unsqueeze(2)
-        cross_recon2_with_centers = cross_recon2 + centers2.unsqueeze(2)
+        patch_recon1_with_centers = patch_recon1 + centers1.unsqueeze(2)
+        patch_recon2_with_centers = patch_recon2 + centers2.unsqueeze(2)
 
         # Return all intermediate point clouds
         output = {
@@ -362,8 +413,8 @@ class PQAEPretrain(pl.LightningModule):
             "group2": group2_with_centers,
             "centers1": centers1,
             "centers2": centers2,
-            "cross_recon1": cross_recon1_with_centers,
-            "cross_recon2": cross_recon2_with_centers,
+            "patch_recon1": patch_recon1_with_centers,
+            "patch_recon2": patch_recon2_with_centers,
             "self_recon1": self_recon1,
             "self_recon2": self_recon2,
             "relative_center_1_2": relative_center_1_2,
@@ -372,6 +423,8 @@ class PQAEPretrain(pl.LightningModule):
             "scale1": scale1,
             "scale2": scale2,
         }
+        output[f"{self.reconstruction_strategy}_recon1"] = patch_recon1_with_centers
+        output[f"{self.reconstruction_strategy}_recon2"] = patch_recon2_with_centers
 
         # Collect outputs for epoch end processing
         self.test_step_outputs.append(output)
@@ -436,12 +489,18 @@ class PQAEPretrain(pl.LightningModule):
                     str(sample_dir / "group2.ply"),
                 )
                 save_ply(
-                    batch_output["cross_recon1"][i].reshape(-1, 3).cpu().numpy(),
-                    str(sample_dir / "cross_recon1.ply"),
+                    batch_output["patch_recon1"][i].reshape(-1, 3).cpu().numpy(),
+                    str(
+                        sample_dir
+                        / f"{self.reconstruction_strategy}_recon1.ply"
+                    ),
                 )
                 save_ply(
-                    batch_output["cross_recon2"][i].reshape(-1, 3).cpu().numpy(),
-                    str(sample_dir / "cross_recon2.ply"),
+                    batch_output["patch_recon2"][i].reshape(-1, 3).cpu().numpy(),
+                    str(
+                        sample_dir
+                        / f"{self.reconstruction_strategy}_recon2.ply"
+                    ),
                 )
                 # Save self-reconstruction outputs only if enabled
                 if self.enable_self_reconstruction:
@@ -458,6 +517,7 @@ class PQAEPretrain(pl.LightningModule):
                 metadata = {
                     "id": sample_id,
                     "self_reconstruction_enabled": self.enable_self_reconstruction,
+                    "reconstruction_strategy": self.reconstruction_strategy,
                     "scale1": batch_output["scale1"][i].item(),
                     "scale2": batch_output["scale2"][i].item(),
                     "centers1": batch_output["centers1"][i].cpu().numpy().tolist(),
