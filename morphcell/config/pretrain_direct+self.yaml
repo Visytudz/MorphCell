@@ -1,5 +1,5 @@
 defaults:
-  - system: pretrain_direct_self
+  - system: pretrain_direct+self
   - data: pretrain
   - logger: [wandb]
   - callback: pretrain

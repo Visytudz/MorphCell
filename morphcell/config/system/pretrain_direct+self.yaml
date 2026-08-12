@@ -9,8 +9,7 @@ defaults:
 
 _target_: morphcell.model.PQAEPretrain
 
-# PQAEv3 used the decoder's default trainable spherical template. Keep this
-# explicit because the shared decoder config has changed since that run.
+# Match the trainable spherical template used by PQAEv3.
 global_decoder:
   optimize_template: true
 
