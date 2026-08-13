@@ -296,8 +296,6 @@ class PQAEPretrain(pl.LightningModule):
             "train/loss_patch": loss_patch * 1000,
             "train/loss_self": loss_self * 1000,
         }
-        # Preserve the historical metric for existing cross-view runs.
-        log_dict[f"train/loss_{self.reconstruction_strategy}"] = loss_patch * 1000
         self.log_dict(
             log_dict,
             on_step=True,
@@ -490,17 +488,11 @@ class PQAEPretrain(pl.LightningModule):
                 )
                 save_ply(
                     batch_output["patch_recon1"][i].reshape(-1, 3).cpu().numpy(),
-                    str(
-                        sample_dir
-                        / f"{self.reconstruction_strategy}_recon1.ply"
-                    ),
+                    str(sample_dir / f"{self.reconstruction_strategy}_recon1.ply"),
                 )
                 save_ply(
                     batch_output["patch_recon2"][i].reshape(-1, 3).cpu().numpy(),
-                    str(
-                        sample_dir
-                        / f"{self.reconstruction_strategy}_recon2.ply"
-                    ),
+                    str(sample_dir / f"{self.reconstruction_strategy}_recon2.ply"),
                 )
                 # Save self-reconstruction outputs only if enabled
                 if self.enable_self_reconstruction:
