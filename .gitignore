@@ -10,29 +10,15 @@ dist/
 .venv/
 .python-version.local
 
-# IDE and editor state
+# IDE and Tools
 .vscode/
-.idea/
-
-# Agent/tool local state
 .agents/
-.claude/
 .codex/
-.qoder/
-
-# Local contributor/agent notes
 AGENTS.md
-CLAUDE.md
 
 # Data, runs, and generated artifacts
 /datasets
 /outputs/
-
-# Local analysis and utility workspaces
-/docs/
 /notebooks/
 /scripts/
-
-# Reports and exported diagnostics
-*.html
 
