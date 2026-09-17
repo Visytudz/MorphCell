@@ -1,0 +1,24 @@
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+
+# Virtual environments and package managers
+.venv/
+.python-version.local
+
+# IDE and Tools
+.vscode/
+.agents/
+.codex/
+AGENTS.md
+
+# Data, runs, and generated artifacts
+*.h5
+*.hdf5
+*.npy
+outputs/
+notebooks/

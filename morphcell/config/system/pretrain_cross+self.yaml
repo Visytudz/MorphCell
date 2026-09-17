@@ -1,0 +1,28 @@
+defaults:
+  - model/share@share
+  - model/view_generator@view_generator
+  - model/extractor@extractor
+  - model/sqtd@global_decoder
+  - model/decoder@decoder
+  - transform/default@transform
+  - _self_
+
+_target_: morphcell.model.PQAEPretrain
+
+optimizer_cfg:
+  lr: 5e-4
+  min_lr: 1e-6
+  epochs: 300
+  weight_decay: 0.05
+  warmup_epochs: 10
+  warmup_lr_init: 1e-6
+  unfreeze_extractor_epoch: 0  # Set > 0 to freeze extractor and train only decoders initially
+
+loss_weights:
+  cross: 1.0      # cross reconstruction, core task
+  self: 0.5       # self reconstruction, auxiliary task
+
+enable_self_reconstruction: true
+reconstruction_strategy: cross
+resume_ckpt_path: null
+pretrained_ckpt_path: null

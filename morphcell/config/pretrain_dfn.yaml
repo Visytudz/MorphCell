@@ -1,0 +1,12 @@
+defaults:
+  - system: pretrain_dfn
+  - data: default
+  - logger: [wandb]
+  - callback: default
+  - trainer: default
+  - paths: default
+  - hydra: default
+  - _self_
+
+project_name: "3DMorphCell"
+seed: 42

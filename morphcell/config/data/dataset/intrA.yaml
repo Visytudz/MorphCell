@@ -1,0 +1,7 @@
+intrA:
+  _target_: "morphcell.data.HDF5Dataset"
+  path: "${paths.data_root}/intrA"
+  splits: ["set1"]
+  num_points: null
+  normalize: true
+  class_choice: null

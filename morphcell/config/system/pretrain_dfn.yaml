@@ -1,0 +1,17 @@
+defaults:
+  - model/dfn_reconstructor@reconstructor
+  - transform/default@transform
+  - _self_
+
+_target_: morphcell.model.DFNPretrain
+
+optimizer_cfg:
+  lr: 5e-4
+  min_lr: 1e-6
+  epochs: 300
+  weight_decay: 0.05
+  warmup_epochs: 10
+  warmup_lr_init: 1e-6
+
+resume_ckpt_path: null
+pretrained_ckpt_path: null

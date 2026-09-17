@@ -1,0 +1,2 @@
+project_root: ${oc.env:MORPHCELL_PROJECT_ROOT,${oc.env:PWD}}
+data_root: ${oc.env:MORPHCELL_DATA_ROOT,${paths.project_root}/datasets}

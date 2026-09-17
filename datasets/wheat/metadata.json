@@ -1,0 +1,14 @@
+{
+    "label2name": {
+        "0": "epidermis_maturation",
+        "1": "epidermis_elongation",
+        "2": "cortex_maturation",
+        "3": "cortex_elongation",
+        "4": "endodermis_maturation",
+        "5": "endodermis_elongation",
+        "6": "pericycle_maturation",
+        "7": "pericycle_elongation",
+        "8": "stele_maturation",
+        "9": "stele_elongation"
+    }
+}
