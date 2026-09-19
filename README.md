@@ -1,6 +1,9 @@
 <h1 align="center">MorphCell</h1>
 
 <p align="center">
+  <a href="https://doi.org/10.64898/2026.09.17.752374">
+    <img src="https://img.shields.io/badge/bioRxiv-Preprint-B31B1B" alt="bioRxiv preprint">
+  </a>
   <a href="https://pytorch.org/">
     <img src="https://img.shields.io/badge/PyTorch-2.7-EE4C2C?logo=pytorch&amp;logoColor=white" alt="PyTorch 2.7">
   </a>
@@ -18,6 +21,8 @@
 ![MorphCell cover](docs/cover.png)
 
 MorphCell is a point-cloud learning framework for three-dimensional cell morphology. The repository provides the model implementations, data loaders, Hydra configurations and training scripts used in the MorphCell study.
+
+The [paper](https://doi.org/10.64898/2026.09.17.752374) is available on bioRxiv.
 
 ## Installation
 
