@@ -4,6 +4,9 @@
   <a href="https://doi.org/10.64898/2026.09.17.752374">
     <img src="https://img.shields.io/badge/bioRxiv-Preprint-B31B1B" alt="bioRxiv preprint">
   </a>
+  <a href="http://creativecommons.org/licenses/by-nc/4.0/">
+    <img src="https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg" alt="CC BY-NC 4.0">
+  </a>
   <a href="https://pytorch.org/">
     <img src="https://img.shields.io/badge/PyTorch-2.7-EE4C2C?logo=pytorch&amp;logoColor=white" alt="PyTorch 2.7">
   </a>
@@ -134,3 +137,7 @@ bash scripts/pretrain_cytodl_point.sh
 | `pretrain_cytodl_point.sh` | point-based CytoDL pretraining              | `outputs/pretrain/pretrain_cytodl_point/` |
 
 The DFN baseline is derived from [CellShape](https://github.com/Sentinal4D/cellshape). The point-based CytoDL baseline is derived from [CytoDL](https://github.com/AllenCell/cyto-dl/tree/br_release).
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International license](http://creativecommons.org/licenses/by-nc/4.0/). See [LICENSE](LICENSE) for details.
