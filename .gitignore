@@ -21,5 +21,12 @@ AGENTS.md
 *.hdf5
 *.npy
 outputs/
-notebooks/
 checkpoints/
+
+# Track only explicitly selected notebook files.
+/notebooks/**
+!/notebooks/**/
+!/notebooks/api_demo.ipynb
+
+# Jupyter autosave checkpoints.
+**/.ipynb_checkpoints/

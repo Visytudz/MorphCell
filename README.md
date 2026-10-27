@@ -4,6 +4,9 @@
   <a href="https://doi.org/10.64898/2026.09.17.752374">
     <img src="https://img.shields.io/badge/bioRxiv-Preprint-B31B1B" alt="bioRxiv preprint">
   </a>
+  <a href="https://huggingface.co/visytudz/MorphCell">
+    <img src="https://img.shields.io/badge/Hugging%20Face-Checkpoints-FFD21E" alt="Hugging Face checkpoints">
+  </a>
   <a href="http://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg" alt="CC BY-NC 4.0">
   </a>
@@ -23,7 +26,7 @@
 
 ![MorphCell cover](docs/cover.png)
 
-MorphCell is a point-cloud learning framework for three-dimensional cell morphology. The repository provides the model implementations, data loaders, Hydra configurations and training scripts used in the MorphCell study.
+MorphCell is a point-cloud learning framework for three-dimensional cell morphology. The repository provides model implementations, data loaders, Hydra configurations, training scripts and a unified inference API with an [interactive demo](notebooks/api_demo.ipynb).
 
 The [paper](https://doi.org/10.64898/2026.09.17.752374) is available on bioRxiv.
 
@@ -117,6 +120,31 @@ Each biological dataset includes a `metadata.json` file that maps integer labels
   }
 }
 ```
+
+## Pretrained checkpoints
+
+Four pretrained checkpoints are available on [Hugging Face](https://huggingface.co/visytudz/MorphCell). Each checkpoint should be loaded with its corresponding internal Hydra configuration:
+
+| Checkpoint | Description | Inference `config_name` |
+| --- | --- | --- |
+| `morphcell_cross_self.ckpt` | MorphCell main model: cross-view + self-reconstruction | `system/pretrain_cross+self` |
+| `morphcell_direct_self.ckpt` | Direct + self-reconstruction ablation | `system/pretrain_direct+self` |
+| `dfn_dgcnn.ckpt` | DFN baseline with a DGCNN encoder | `system/pretrain_dfn` |
+| `cytodl_point.ckpt` | CytoDL point-cloud baseline | `system/pretrain_cytodl_point` |
+
+Run the following command from the repository root to download all four files into `checkpoints/`. `uvx` runs the Hugging Face CLI without adding it to the project's dependencies:
+
+```bash
+uvx --from huggingface-hub hf download visytudz/MorphCell \
+    --include "*.ckpt" \
+    --local-dir checkpoints
+```
+
+For all four configurations, pass `morphcell/config` as `config_dir` to `MorphCellInference`.
+
+## Inference demo
+
+See the [API demo notebook](notebooks/api_demo.ipynb) for examples of how to use the MorphCell inference API.
 
 ## Training
 
