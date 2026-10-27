@@ -41,6 +41,20 @@ MorphCell uses [uv](https://docs.astral.sh/uv/) to manage a reproducible Python 
 - CUDA Toolkit 11.8, including `nvcc`
 - A C/C++ compiler and Ninja
 
+### Tested environment
+
+| Component | Tested configuration |
+| --- | --- |
+| Operating system | Ubuntu 22.04.5 LTS (Linux) |
+| Python | 3.12.13 |
+| PyTorch | 2.7.1+cu118 (CUDA runtime 11.8) |
+| PyTorch Lightning | 2.5.6 |
+| Analysis packages | NumPy 2.1.2, SciPy 1.15.2, scikit-learn 1.6.1, UMAP 0.5.7 |
+
+The model reported in the paper was trained on a single NVIDIA A800 GPU. The pretrained demo requires an NVIDIA GPU for CUDA-based point-cloud operations. Full dependency versions are recorded in [pyproject.toml](pyproject.toml) and [uv.lock](uv.lock).
+
+### Installation steps
+
 Install the build tools with:
 
 ```bash
