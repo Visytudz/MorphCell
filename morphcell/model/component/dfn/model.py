@@ -72,7 +72,7 @@ class DGCNNEncoder(nn.Module):
 
     def forward(self, pts: torch.Tensor) -> torch.Tensor:
         """
-        Encodes a point cloud into a global codeword using DGCNN.
+        Encodes a point cloud into global features using DGCNN.
 
         Parameters
         ----------
@@ -82,7 +82,7 @@ class DGCNNEncoder(nn.Module):
         Returns
         -------
         torch.Tensor
-            The global codeword, shape (B, feat_dims, 1).
+            The global features, shape (B, feat_dims, 1).
         """
         pts_t = pts.transpose(2, 1).contiguous()  # (B, 3, N)
 
@@ -98,12 +98,12 @@ class DGCNNEncoder(nn.Module):
         # Process with final MLP
         features_per_point = self.mlp_global(x_cat)  # (B, feat_dims, N)
 
-        # Global max pooling to get the final codeword
-        codeword, _ = torch.max(
+        # Global max pooling to get the final global features
+        features, _ = torch.max(
             features_per_point, 2, keepdim=True
         )  # (B, feat_dims, 1)
 
-        return codeword
+        return features
 
 
 class GraphLayer(nn.Module):
@@ -164,7 +164,7 @@ class FoldingNetEncoder(nn.Module):
 
     def forward(self, pts: torch.Tensor) -> torch.Tensor:
         """
-        Encodes a point cloud into a global codeword.
+        Encodes a point cloud into global features.
 
         Parameters
         ----------
@@ -174,7 +174,7 @@ class FoldingNetEncoder(nn.Module):
         Returns
         -------
         torch.Tensor
-            The global codeword, shape (B, feat_dims, 1).
+            The global features, shape (B, feat_dims, 1).
         """
         pts_t = pts.transpose(2, 1)  # (B, 3, N)
         idx = knn(pts_t, k=self.k)  # (B, N, k)
@@ -187,9 +187,9 @@ class FoldingNetEncoder(nn.Module):
         graph_features2 = self.graph_layer2(graph_features1, idx)  # (B, 1024, N)
 
         features_global, _ = torch.max(graph_features2, 2, keepdim=True)  # (B, 1024, 1)
-        codeword = self.mlp2(features_global)  # (B, feat_dims, 1)
+        features = self.mlp2(features_global)  # (B, feat_dims, 1)
 
-        return codeword
+        return features
 
 
 class FoldingBlock(nn.Module):
@@ -206,15 +206,15 @@ class FoldingBlock(nn.Module):
         )
 
     def forward(
-        self, codeword_expanded: torch.Tensor, points: torch.Tensor
+        self, features_expanded: torch.Tensor, points: torch.Tensor
     ) -> torch.Tensor:
         """
         Performs the folding operation.
 
         Parameters
         ----------
-        codeword_expanded : torch.Tensor
-            Expanded codeword, shape (B, feat_dims, M).
+        features_expanded : torch.Tensor
+            Expanded features, shape (B, feat_dims, M).
         points : torch.Tensor
             2D grid or intermediate 3D points, shape (B, C, M).
 
@@ -223,7 +223,7 @@ class FoldingBlock(nn.Module):
         torch.Tensor
             Folded points, shape (B, 3, M).
         """
-        concat = torch.cat((codeword_expanded, points), dim=1)  # (B, feat_dims+C, M)
+        concat = torch.cat((features_expanded, points), dim=1)  # (B, feat_dims+C, M)
         return self.mlp(concat)  # (B, 3, M)
 
 
@@ -270,13 +270,13 @@ class FoldingNetDecoder(nn.Module):
             grid_points = points.transpose(0, 1)  # (3, M)
             self.register_buffer("grid", grid_points.unsqueeze(0))  # (1, 3, M)
 
-    def forward(self, codeword: torch.Tensor) -> torch.Tensor:
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
         """
-        Decodes a codeword into a 3D point cloud.
+        Decodes global features into a 3D point cloud.
 
         Parameters
         ----------
-        codeword : torch.Tensor
+        features : torch.Tensor
             The global feature vector, shape (B, feat_dims, 1).
 
         Returns
@@ -284,13 +284,13 @@ class FoldingNetDecoder(nn.Module):
         torch.Tensor
             The reconstructed point cloud, shape (B, M, 3).
         """
-        B = codeword.shape[0]
-        codeword_expanded = codeword.expand(-1, -1, self.M)  # (B, feat_dims, M)
-        grid_points = self.grid.expand(B, -1, -1).to(codeword.device)  # (B, 2, M)
+        B = features.shape[0]
+        features_expanded = features.expand(-1, -1, self.M)  # (B, feat_dims, M)
+        grid_points = self.grid.expand(B, -1, -1).to(features.device)  # (B, 2, M)
 
-        intermediate_cloud = self.folding1(codeword_expanded, grid_points)  # (B, 3, M)
+        intermediate_cloud = self.folding1(features_expanded, grid_points)  # (B, 3, M)
         reconstruction = self.folding2(
-            codeword_expanded, intermediate_cloud
+            features_expanded, intermediate_cloud
         )  # (B, 3, M)
 
         return reconstruction.transpose(2, 1)  # (B, M, 3)
@@ -311,7 +311,7 @@ class DFNReconstructor(nn.Module):
         Parameters
         ----------
         feat_dims : int, optional
-            The dimensionality of the global feature vector (codeword).
+            The dimensionality of the global feature vector.
         k : int, optional
             The number of nearest neighbors, used by both encoders.
         grid_size : int, optional
@@ -350,8 +350,8 @@ class DFNReconstructor(nn.Module):
         torch.Tensor
             Reconstructed point cloud, shape (B, M, 3).
         """
-        codeword = self.encoder(point_cloud)  # (B, feat_dims, 1)
-        reconstruction = self.decoder(codeword)  # (B, M, 3)
+        features = self.encoder(point_cloud)  # (B, feat_dims, 1)
+        reconstruction = self.decoder(features)  # (B, M, 3)
         return reconstruction
 
     @staticmethod

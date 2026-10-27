@@ -28,11 +28,11 @@ class DFNBackend(InferenceBackend):
         )
 
     def extract_features(self, data: torch.Tensor) -> FeatureBundle:
-        codeword = self.extractor(data).squeeze(-1)
+        global_features = self.extractor(data).squeeze(-1)
         return FeatureBundle(
-            global_features=codeword,
+            global_features=global_features,
             local_features=None,
-            concated_features=codeword,
+            concated_features=global_features,
         )
 
     def reconstruct(self, data: torch.Tensor) -> torch.Tensor:
