@@ -142,9 +142,11 @@ uvx --from huggingface-hub hf download visytudz/MorphCell \
 
 For all four configurations, pass `morphcell/config` as `config_dir` to `MorphCellInference`.
 
-## Inference demo
+## Demo and Analysis
 
 See the [API demo notebook](notebooks/api_demo.ipynb) for examples of how to use the MorphCell inference API.
+
+The red blood cell (RBC) notebooks cover [feature extraction](notebooks/rbc/01_feature_extraction), [feature-space analysis](notebooks/rbc/02_feature_space/manifold_analysis.ipynb), and [representation benchmarking](notebooks/rbc/03_benchmark/representation_benchmark.ipynb). Run them in numbered order.
 
 ## Training
 
