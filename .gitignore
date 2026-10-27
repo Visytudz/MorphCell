@@ -28,5 +28,19 @@ checkpoints/
 !/notebooks/**/
 !/notebooks/api_demo.ipynb
 
+# RBC public analysis notebooks and fixed benchmark inputs.
+!/notebooks/rbc/01_feature_extraction/morphcell.ipynb
+!/notebooks/rbc/01_feature_extraction/dfn.ipynb
+!/notebooks/rbc/01_feature_extraction/cytodl.ipynb
+!/notebooks/rbc/02_feature_space/manifold_analysis.ipynb
+!/notebooks/rbc/02_feature_space/utils.py
+!/notebooks/rbc/03_benchmark/representation_benchmark.ipynb
+!/notebooks/rbc/03_benchmark/utils.py
+!/notebooks/rbc/03_benchmark/data/morph.csv
+!/notebooks/rbc/03_benchmark/data/ids.npy
+!/notebooks/rbc/03_benchmark/data/morph.npy
+!/notebooks/rbc/03_benchmark/data/norm_s.npy
+!/notebooks/rbc/03_benchmark/data/spharm.csv
+
 # Jupyter autosave checkpoints.
 **/.ipynb_checkpoints/
