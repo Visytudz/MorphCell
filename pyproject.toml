@@ -29,6 +29,10 @@ dependencies = [
     "seaborn==0.13.2",
     "tifffile==2025.2.18",
     "scikit-image>=0.26.0",
+    "scipy==1.15.2",
+    "scikit-learn==1.6.1",
+    "umap-learn==0.5.7",
+    "numba==0.61.0",
 ]
 
 [project.scripts]

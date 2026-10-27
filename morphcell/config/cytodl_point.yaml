@@ -1,5 +1,5 @@
 defaults:
-  - system: pretrain_direct+self
+  - system: cytodl_point
   - data: default
   - logger: [wandb]
   - callback: default

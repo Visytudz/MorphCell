@@ -1,5 +1,5 @@
 defaults:
-  - system: pretrain_dfn
+  - system: morphcell_direct+self
   - data: default
   - logger: [wandb]
   - callback: default

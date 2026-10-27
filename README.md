@@ -127,10 +127,10 @@ Four pretrained checkpoints are available on [Hugging Face](https://huggingface.
 
 | Checkpoint | Description | Inference `config_name` |
 | --- | --- | --- |
-| `morphcell_cross_self.ckpt` | MorphCell main model: cross-view + self-reconstruction | `system/pretrain_cross+self` |
-| `morphcell_direct_self.ckpt` | Direct + self-reconstruction ablation | `system/pretrain_direct+self` |
-| `dfn_dgcnn.ckpt` | DFN baseline with a DGCNN encoder | `system/pretrain_dfn` |
-| `cytodl_point.ckpt` | CytoDL point-cloud baseline | `system/pretrain_cytodl_point` |
+| `morphcell_cross_self.ckpt` | MorphCell main model: cross-view + self-reconstruction | `system/morphcell_cross+self` |
+| `morphcell_direct_self.ckpt` | Direct + self-reconstruction ablation | `system/morphcell_direct+self` |
+| `dfn_dgcnn.ckpt` | DFN baseline with a DGCNN encoder | `system/dfn_dgcnn` |
+| `cytodl_point.ckpt` | CytoDL point-cloud baseline | `system/cytodl_point` |
 
 Run the following command from the repository root to download all four files into `checkpoints/`. `uvx` runs the Hugging Face CLI without adding it to the project's dependencies:
 
@@ -151,18 +151,18 @@ See the [API demo notebook](notebooks/api_demo.ipynb) for examples of how to use
 Run training commands from the repository root after activating the uv environment. Four pretraining entry points are provided:
 
 ```bash
-bash scripts/pretrain_dfn.sh
-bash scripts/pretrain_direct+self.sh
-bash scripts/pretrain_cross+self.sh
-bash scripts/pretrain_cytodl_point.sh
+bash scripts/dfn_dgcnn.sh
+bash scripts/morphcell_direct+self.sh
+bash scripts/morphcell_cross+self.sh
+bash scripts/cytodl_point.sh
 ```
 
-| Script                     | Configuration                               | Output directory                          |
-| -------------------------- | ------------------------------------------- | ----------------------------------------- |
-| `pretrain_dfn.sh`          | `pretrain_dfn` with a DGCNN encoder         | `outputs/pretrain/pretrain_dfn_dgcnn/`    |
-| `pretrain_direct+self.sh`  | direct reconstruction with self-supervision | `outputs/pretrain/pretrain_direct+self/`  |
-| `pretrain_cross+self.sh`   | cross reconstruction with self-supervision  | `outputs/pretrain/pretrain_cross+self/`   |
-| `pretrain_cytodl_point.sh` | point-based CytoDL pretraining              | `outputs/pretrain/pretrain_cytodl_point/` |
+| Script | Configuration | Output directory |
+| --- | --- | --- |
+| `dfn_dgcnn.sh` | `dfn_dgcnn` | `outputs/pretrain/dfn_dgcnn/` |
+| `morphcell_direct+self.sh` | `morphcell_direct+self` | `outputs/pretrain/morphcell_direct+self/` |
+| `morphcell_cross+self.sh` | `morphcell_cross+self` | `outputs/pretrain/morphcell_cross+self/` |
+| `cytodl_point.sh` | `cytodl_point` | `outputs/pretrain/cytodl_point/` |
 
 The DFN baseline is derived from [CellShape](https://github.com/Sentinal4D/cellshape). The point-based CytoDL baseline is derived from [CytoDL](https://github.com/AllenCell/cyto-dl/tree/br_release).
 

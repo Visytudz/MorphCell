@@ -27,7 +27,7 @@ class InferenceModel:
         config_dir : str
             Path to config directory (e.g., "morphcell/config")
         config_name : str
-            Config name without .yaml extension (e.g., "system/pretrain")
+            Config name without .yaml extension (e.g., "system/morphcell_cross+self")
         checkpoint_path : str
             Path to checkpoint file
         device : str
@@ -76,7 +76,7 @@ class InferenceModel:
                 cfg = hydra.compose(config_name=self.config_name)
 
             # Extract the actual model config
-            # For "system/pretrain", cfg will be wrapped as cfg.system
+            # For "system/morphcell_cross+self", cfg will be wrapped as cfg.system
             config_key = (
                 self.config_name.split("/")[0] if "/" in self.config_name else None
             )

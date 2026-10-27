@@ -1,5 +1,5 @@
 defaults:
-  - system: pretrain_cytodl_point
+  - system: morphcell_cross+self
   - data: default
   - logger: [wandb]
   - callback: default
