@@ -2,12 +2,12 @@ defaults:
   - model/share@share
   - model/view_generator@view_generator
   - model/extractor@extractor
-  - model/sqtd@global_decoder
+  - model/sqtd_fused_learnable@global_decoder
   - model/decoder@decoder
   - transform/default@transform
   - _self_
 
-_target_: morphcell.model.PQAEPretrain
+_target_: morphcell.model.MorphCellPretrain
 
 optimizer_cfg:
   lr: 5e-4

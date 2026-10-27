@@ -1,0 +1,6 @@
+defaults:
+  - sqtd
+  - _self_
+
+optimize_template: true
+enable_feature_fusion: true

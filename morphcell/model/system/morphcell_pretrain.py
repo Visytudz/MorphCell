@@ -13,7 +13,7 @@ from morphcell.utils.io import save_ply
 logger = logging.getLogger(__name__)
 
 
-class PQAEPretrain(pl.LightningModule):
+class MorphCellPretrain(pl.LightningModule):
     def __init__(
         self,
         extractor,

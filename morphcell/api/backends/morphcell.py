@@ -1,4 +1,4 @@
-"""PQAE backend for feature extraction, reconstruction, and saliency."""
+"""MorphCell backend for feature extraction, reconstruction, and saliency."""
 
 from typing import Callable
 
@@ -10,8 +10,8 @@ from morphcell.api.types import FeatureBundle, ModelCapabilities
 from morphcell.api.utils import prepare_input
 
 
-class PQAEBackend(InferenceBackend):
-    """Inference backend for PQAE models."""
+class MorphCellBackend(InferenceBackend):
+    """Inference backend for MorphCell models."""
 
     def __init__(self, model, device: torch.device):
         self.model = model

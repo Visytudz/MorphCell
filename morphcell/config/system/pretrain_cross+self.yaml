@@ -7,7 +7,7 @@ defaults:
   - transform/default@transform
   - _self_
 
-_target_: morphcell.model.PQAEPretrain
+_target_: morphcell.model.MorphCellPretrain
 
 optimizer_cfg:
   lr: 5e-4

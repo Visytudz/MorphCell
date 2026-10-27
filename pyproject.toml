@@ -38,7 +38,7 @@ morphcell-run = "morphcell.main:main"
 include = ["morphcell*"]
 
 [tool.setuptools.package-data]
-morphcell = ["configs/**/*.yaml"]
+morphcell = ["config/**/*.yaml"]
 
 [tool.uv]
 package = true

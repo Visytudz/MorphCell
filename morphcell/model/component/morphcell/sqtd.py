@@ -76,6 +76,12 @@ class SphericalQueryTransformerDecoder(nn.Module):
         Dimension of feedforward network (default is 1024).
     dropout : float, optional
         Dropout rate (default is 0.1).
+    optimize_template : bool, optional
+        Whether the spherical template is trainable (default is True).
+    enable_feature_fusion : bool, optional
+        Whether to fuse CLS and pooled patch features (default is True).
+        When False, reconstruction uses only CLS features and no fusion layer
+        is created, matching CLS-only checkpoints.
     """
 
     def __init__(
@@ -87,10 +93,12 @@ class SphericalQueryTransformerDecoder(nn.Module):
         dim_feedforward=1024,
         dropout=0.1,
         optimize_template=True,
+        enable_feature_fusion: bool = True,
     ):
         super().__init__()
         self.embed_dim = embed_dim
         self.num_queries = num_queries
+        self.enable_feature_fusion = enable_feature_fusion
 
         # Generate standard unit sphere (Fibonacci Lattice) as anchor template
         initial_template = self._generate_fibonacci_sphere(num_queries)  # (1, N, 3)
@@ -99,7 +107,9 @@ class SphericalQueryTransformerDecoder(nn.Module):
             self.template = nn.Parameter(initial_template, requires_grad=True)
 
         # Feature fusion layer for combining cls_feat and pooled patch_features
-        self.feature_fusion = nn.Linear(embed_dim * 2, embed_dim)
+        self.feature_fusion = (
+            nn.Linear(embed_dim * 2, embed_dim) if enable_feature_fusion else None
+        )
 
         self.pos_encoding = SphericalFourierEmbedding(in_dim=3, embed_dim=embed_dim)
         decoder_layer = nn.TransformerDecoderLayer(
@@ -197,6 +207,7 @@ class SphericalQueryTransformerDecoder(nn.Module):
             Patch features of shape (Batch, P, C) or (Batch, C).
             - If (Batch, P, C): will be max-pooled to (Batch, C) then fused.
             - If (Batch, C): directly fused without pooling.
+            Ignored when enable_feature_fusion is False.
 
         Returns
         -------
@@ -210,7 +221,7 @@ class SphericalQueryTransformerDecoder(nn.Module):
             cls_feat = cls_feat.unsqueeze(1)  # (B, 1, C)
 
         # 2. Optionally fuse with patch features
-        if patch_features is not None:
+        if self.enable_feature_fusion and patch_features is not None:
             # Handle different patch_features shapes
             if patch_features.dim() == 3:
                 # (B, P, C) -> Max pool to (B, C)

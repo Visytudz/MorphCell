@@ -7,7 +7,7 @@ from .parts.recon_head import ReconstructionHead
 
 class PointDecoder(nn.Module):
     """
-    The decoder module for the PQAE model.
+    The decoder module for the MorphCell model.
     This module is responsible for reconstructing the point cloud patches
     from the encoded features using positional queries.
     It comprises two main components:

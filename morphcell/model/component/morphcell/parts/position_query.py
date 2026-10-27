@@ -7,7 +7,7 @@ from morphcell.utils.ops import get_pos_embed
 
 class PositionalQuery(nn.Module):
     """
-    Performs the core cross-attention mechanism for Point-PQAE.
+    Performs the core cross-attention mechanism for MorphCell.
 
     This module takes the encoded features of two views and their geometric
     information, generates the View-Relative Positional Embedding (VRPE), and

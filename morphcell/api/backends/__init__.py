@@ -3,22 +3,22 @@
 from morphcell.api.backends.base import InferenceBackend
 from morphcell.api.backends.cytodl_point import CytoDLPointBackend
 from morphcell.api.backends.dfn import DFNBackend
-from morphcell.api.backends.pqae import PQAEBackend
+from morphcell.api.backends.morphcell import MorphCellBackend
 
 __all__ = [
     "InferenceBackend",
     "CytoDLPointBackend",
     "DFNBackend",
-    "PQAEBackend",
+    "MorphCellBackend",
     "create_backend",
 ]
 
 
 def create_backend(model, device) -> InferenceBackend:
-    from morphcell.model import PQAEPretrain, DFNPretrain, CytoDLPointPretrain
+    from morphcell.model import MorphCellPretrain, DFNPretrain, CytoDLPointPretrain
 
-    if isinstance(model, PQAEPretrain):
-        return PQAEBackend(model, device)
+    if isinstance(model, MorphCellPretrain):
+        return MorphCellBackend(model, device)
 
     if isinstance(model, DFNPretrain):
         return DFNBackend(model)

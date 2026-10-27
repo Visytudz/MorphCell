@@ -7,7 +7,7 @@ from .parts.encoder import Encoder
 
 class FeatureExtractor(nn.Module):
     """
-    The feature extractor module for the PQAE model.
+    The feature extractor module for the MorphCell model.
     This module is responsible for processing the input point cloud to
     extract both global and local features.
 

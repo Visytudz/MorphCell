@@ -3,4 +3,4 @@ feat_dims: 512
 k: 16
 grid_size: 45
 grid_type: plane
-encoder_type: foldingnet
+encoder_type: dgcnn

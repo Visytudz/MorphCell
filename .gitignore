@@ -22,3 +22,4 @@ AGENTS.md
 *.npy
 outputs/
 notebooks/
+checkpoints/
